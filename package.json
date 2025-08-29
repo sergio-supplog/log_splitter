@@ -1,0 +1,25 @@
+{
+  "name": "log-spitter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Split heavy log files by day from input/ into output/",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -b",
+    "start": "node dist/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "keywords": [
+    "logs",
+    "split",
+    "daily",
+    "cli"
+  ]
+}
+
