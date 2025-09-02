@@ -4,6 +4,7 @@ import path from 'path';
 import readline from 'readline';
 import { consola } from 'consola';
 import { defineCommand, runMain } from 'citty';
+import { formatNumber } from './utils/number/format.js';
 import { humanFileSize } from './utils/string/fileSize.js';
 import { msToHuman, secondsToHuman } from './utils/date/time.js';
 
@@ -100,6 +101,8 @@ async function processLogFile(fileName, maxLines, skipLines, reverse) {
         totalLines = result.totalLines;
     }
 
+    const readSpinner = ora(`Reading lines from ${fileName}...`).start();
+
     const readStream = fs.createReadStream(inputPath, { encoding: 'utf8' });
     const writeStream = fs.createWriteStream(outputPath);
 
@@ -131,10 +134,12 @@ async function processLogFile(fileName, maxLines, skipLines, reverse) {
             lines.push(line);
             lineCount++;
         }
+        readSpinner.succeed(`Read ${formatNumber(lineCount)} lines from ${fileName}`);
         for (const l of lines) {
             writeStream.write(l + '\n');
         }
     } catch (error) {
+        readSpinner.fail(`Error reading ${fileName}: ${error.message}`);
         consola.error(`Error processing file ${fileName}:`, error);
     } finally {
         writeStream.end();
@@ -190,7 +195,7 @@ async function countLinesWithTiming(fileName, inputPath) {
         const diffText = diff > 0 ? `${diffHuman} slower` : `${diffHuman} faster`;
 
         // Stop spinner with success message
-        spinner.succeed(`Total lines in ${fileName}: ${totalLines} (took ${elapsedHuman}, ${diffText} than estimated)`);
+        spinner.succeed(`Total lines in ${fileName}: ${formatNumber(totalLines)} (took ${elapsedHuman}, ${diffText} than estimated)`);
 
         return { totalLines, elapsed, fileSizeHuman };
     } catch (error) {
