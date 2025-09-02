@@ -68,8 +68,8 @@ const command = defineCommand({
 
             for (const file of logFiles) {
                 consola.info(`Processing ${file}...`);
-                await processLogFile(file, maxLines, skipLines, reverse);
-                consola.success(`Finished processing ${file}.`);
+                const outputFileName = await processLogFile(file, maxLines, skipLines, reverse);
+                consola.success(`Finished processing ${file} -> ${outputFileName}.`);
             }
 
             consola.success('All log files processed.');
@@ -90,10 +90,15 @@ runMain(command);
  * @param {number} maxLines - The number of lines to extract.
  * @param {number} skipLines - The number of lines to skip from the beginning or end depending on reverse.
  * @param {boolean} reverse - Whether to extract from the end instead of the beginning.
+ * @returns {Promise<string>} The name of the output file created.
  */
 async function processLogFile(fileName, maxLines, skipLines, reverse) {
     const inputPath = path.join('./input', fileName);
-    const outputPath = path.join('./output', fileName);
+
+    let suffix = `_lines-${maxLines}_skip-${skipLines}`;
+    if (reverse) suffix += '_reverse';
+    const outputFileName = fileName.replace('.log', `${suffix}.log`);
+    const outputPath = path.join('./output', outputFileName);
 
     let totalLines = 0;
     if (reverse) {
@@ -144,6 +149,8 @@ async function processLogFile(fileName, maxLines, skipLines, reverse) {
     } finally {
         writeStream.end();
     }
+
+    return outputFileName;
 }
 
 //
