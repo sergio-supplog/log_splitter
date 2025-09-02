@@ -53,7 +53,7 @@ const command = defineCommand({
             }
         }
         
-        consola.box(`Log Splitter\n\nMax lines: ${maxLines}\nSkip lines: ${skipLines}${reverse ? '\nReverse mode' : ''}`);
+        consola.box(`    Log Splitter    \n\nMax lines: ${maxLines}\nSkip lines: ${skipLines}${reverse ? '\nReverse mode' : ''}`);
 
         const inputDir = './input';
         const outputDir = './output';
@@ -145,12 +145,6 @@ async function processLogFile(fileName, maxLines, skipLines, reverse) {
 // ==== Helper Functions ==============================================================================================
 //
 
-/**
- * Counts the total lines in a file and measures the time taken.
- * @param {string} fileName - The name of the file.
- * @param {string} inputPath - The path to the file.
- * @returns {Promise<{totalLines: number, elapsed: number, fileSizeHuman: string}>}
- */
 /**
  * Counts the total lines in a file, measures the time taken, and provides feedback.
  * @param {string} fileName - The name of the file.
