@@ -1,29 +1,26 @@
 {
-  "name": "log-spitter",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Split heavy log files by day from input/ into output/",
+  "name": "log_splitter",
+  "version": "1.0.0",
+  "description": "A tool to extract first 100 lines from large log files",
+  "main": "index.js",
   "type": "module",
-  "main": "dist/index.js",
+  "dependencies": {
+    "citty": "^0.1.6",
+    "consola": "^3.4.2"
+  },
   "scripts": {
-    "dev": "tsx src/index.ts",
-    "build": "tsc -b",
-    "start": "node dist/index.js"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "engines": {
-    "node": ">=18"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergio-supplog/log_splitter.git"
   },
+  "keywords": [],
   "author": "",
-  "license": "UNLICENSED",
-  "keywords": [
-    "logs",
-    "split",
-    "daily",
-    "cli"
-  ],
-  "devDependencies": {
-    "@types/node": "^24.3.0",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
-  }
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sergio-supplog/log_splitter/issues"
+  },
+  "homepage": "https://github.com/sergio-supplog/log_splitter#readme"
 }
