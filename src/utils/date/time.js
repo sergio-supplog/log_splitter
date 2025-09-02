@@ -14,19 +14,32 @@ export function msToHuman(ms) {
  * @returns {string} Human-readable time, e.g., "1m 30s" or "2.5s".
  */
 export function secondsToHuman(seconds) {
-  if (seconds < 1) {
-    return `${(seconds * 1000).toFixed(0)}ms`;
-  }
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const remainingSeconds = Math.floor(seconds % 60);
-  const remainingMinutes = minutes % 60;
+    if (seconds < 1) {
+        return `${(seconds * 1000).toFixed(0)}ms`;
+    }
 
-  if (hours > 0) {
-    return `${hours}h ${remainingMinutes}m ${remainingSeconds}s`;
-  } else if (minutes > 0) {
-    return `${minutes}m ${remainingSeconds}s`;
-  } else {
-    return `${seconds.toFixed(1)}s`;
-  }
+    const units = [
+        { name: 'h', value: 3600 },
+        { name: 'm', value: 60 },
+        { name: 's', value: 1 }
+    ];
+
+    let result = [];
+    let remaining = seconds;
+
+    for (const unit of units) {
+        const count = Math.floor(remaining / unit.value);
+        if (count > 0) {
+            result.push(`${count}${unit.name}`);
+            remaining %= unit.value;
+        }
+    }
+
+    if (result.length === 0) {
+        let str = seconds.toFixed(1);
+        if (str.endsWith('.0')) str = str.slice(0, -2);
+        return `${str}s`;
+    }
+
+    return result.join(' ');
 }

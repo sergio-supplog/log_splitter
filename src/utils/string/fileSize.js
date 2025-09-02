@@ -4,12 +4,13 @@
  * @returns {string} Human-readable size, e.g., "1.5 MB".
  */
 export function humanFileSize(bytes) {
-  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-  let size = bytes;
-  let unitIndex = 0;
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex++;
-  }
-  return `${size.toFixed(1)} ${units[unitIndex]}`;
+    if (bytes < 0) return 'Invalid size';
+    if (bytes === 0) return '0 B';
+    
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const k = 1024;
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const size = bytes / Math.pow(k, i);
+    
+    return `${size.toFixed(1).replace(/\.0$/, '')} ${units[i]}`;
 }
