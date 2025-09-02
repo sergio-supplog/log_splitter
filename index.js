@@ -24,14 +24,22 @@ const command = defineCommand({
         let numLines = args.lines ? parseInt(args.lines) : undefined;
         if (!numLines) {
             let input = await consola.prompt('Enter the number of lines to extract:');
-            input = input.replace(/_/g, ''); // Remove underscores
+            input = input ? input.replace(/_/g, '') : '';
             numLines = parseInt(input);
             if (isNaN(numLines) || numLines <= 0) {
             throw new Error('Invalid number of lines. Please provide a positive integer.');
             }
         }
 
-        let skipLines = args.skip || 0;
+        let skipLines = typeof args.skip === 'number' ? args.skip : undefined;
+        if (skipLines === undefined) {
+            let input = await consola.prompt('Enter the number of lines to skip from the beginning (default 0):');
+            input = input ? input.replace(/_/g, '') : '0';
+            skipLines = parseInt(input);
+            if (isNaN(skipLines) || skipLines < 0) {
+            throw new Error('Invalid number of lines to skip. Please provide a non-negative integer.');
+            }
+        }
 
         const inputDir = './input';
         const outputDir = './output';
@@ -58,8 +66,6 @@ const command = defineCommand({
     }
 });
 
-// Clear the console and run the main command
-process.stdout.write('\x1Bc')
 runMain(command);
 
 //
