@@ -2,14 +2,15 @@
   "name": "log_splitter",
   "version": "1.0.0",
   "description": "A tool to extract first 100 lines from large log files",
-  "main": "index.js",
+  "main": "src/main.js",
   "type": "module",
   "dependencies": {
     "citty": "^0.1.6",
-    "consola": "^3.4.2"
+    "consola": "^3.4.2",
+    "ora": "^8.2.0"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
