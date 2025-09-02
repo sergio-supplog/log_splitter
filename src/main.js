@@ -31,33 +31,34 @@ const command = defineCommand({
         const reverse = args.reverse || false;
         if (reverse) consola.info('Running in reverse mode.');
 
-        let numLines = args.lines;
-        if (!numLines) {
-            let input = await consola.prompt('Enter the number of lines to extract:');
-            input = input ? input.replace(/_/g, '') : '';
-            numLines = parseInt(input);
-            if (isNaN(numLines) || numLines <= 0) {
+        let maxLines = args.lines;
+        if (!maxLines) {
+            const input = await consola.prompt('Enter the number of lines to extract:');
+            const sanitizedInput = input ? input.replace(/_/g, '') : '';
+            maxLines = parseInt(sanitizedInput);
+            if (isNaN(maxLines) || maxLines <= 0) {
                 throw new Error('Invalid number of lines. Please provide a positive integer.');
             }
         }
 
         let skipLines = args.skip;
         if (skipLines === undefined) {
-            let input = await consola.prompt(`Enter the number of lines to skip from the ${reverse ? 'end' : 'beginning'} (default 0):`);
-            input = input ? input.replace(/_/g, '') : '0';
-            skipLines = parseInt(input);
+            const promptMessage = `Enter the number of lines to skip from the ${reverse ? 'end' : 'beginning'} (default 0):`;
+            const input = await consola.prompt(promptMessage);
+            const sanitizedInput = input ? input.replace(/_/g, '') : '0';
+            skipLines = parseInt(sanitizedInput, 10);
             if (isNaN(skipLines) || skipLines < 0) {
                 throw new Error('Invalid number of lines to skip. Please provide a non-negative integer.');
             }
         }
+        
+        consola.box(`Log Splitter\n\nMax lines: ${maxLines}\nSkip lines: ${skipLines}${reverse ? '\nReverse mode' : ''}`);
 
         const inputDir = './input';
         const outputDir = './output';
 
         // Ensure output directory exists
-        if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir);
-        }
+        if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
 
         try {
             const files = await fs.promises.readdir(inputDir);
@@ -65,7 +66,7 @@ const command = defineCommand({
 
             for (const file of logFiles) {
                 consola.info(`Processing ${file}...`);
-                await processLogFile(file, numLines, skipLines, reverse);
+                await processLogFile(file, maxLines, skipLines, reverse);
                 consola.success(`Finished processing ${file}.`);
             }
 
